@@ -1,3 +1,4 @@
+import java.sql.SQLOutput;
 import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
@@ -14,20 +15,26 @@ public class Hammurabi {
         // declare local variables here: grain, population, etc.
         // statements go after the declations
 
-        // initial states
+        // initial variable
         int population = 100;
         int bushels = 2800;
         int acresOfLand = 1000; // Acres
         int bushelsPerAcre = 19; // bushels/acre
 
-        //
+        System.out.format("In year 0, the population is %d.\n"+
+                "There are %d available bushels.\n"+"" +
+                "");
         for(int year = 1; year <= 10; year++){
 
             int acresToBuy = askHowManyAcresToBuy(bushelsPerAcre,bushels);
-            acresOfLand+=acresToBuy;
+            acresOfLand += acresToBuy;
             bushels -= acresToBuy*bushelsPerAcre;
 
-            if(acresToBuy==0){acresOfLand -= askHowManyAcresToSell(acresOfLand);}
+            if(acresToBuy==0){
+                int acreToSell = askHowManyAcresToSell(acresOfLand);
+                bushels += acreToSell*bushelsPerAcre;
+                acresOfLand -= acreToSell;
+            }
 
             int bushelsToFeedPeople = askHowMuchGrainToFeedPeople(bushels);
             bushels -= bushelsToFeedPeople;
@@ -41,7 +48,7 @@ public class Hammurabi {
             population -= peopleStarved;
 
             if(uprising(population,peopleStarved)){
-                System.out.println("You lost");
+                System.out.println("TOO MANY PEOPLE DIED, YOU ARE IMPEACHED, BYE!!");
                 break;
             }
 
@@ -134,9 +141,6 @@ public class Hammurabi {
             }
         }
     }
-
-
-
 
     // ---------------------------------------------------------------------------------
     public int plagueDeaths(int population) {
