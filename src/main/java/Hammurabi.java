@@ -21,9 +21,11 @@ public class Hammurabi {
         int acresOfLand = 1000; // Acres
         int bushelsPerAcre = 19; // bushels/acre
 
-        System.out.format("In year 0, the population is %d.\n"+
-                "There are %d available bushels.\n"+"" +
-                "");
+        System.out.format("\nIn year 0, the population is %d.\n"+
+                "There are %d available bushels.\n"+
+                "You have %d acres of land\n" +
+                "The price is %d bushels per acre.\n\n",population,bushels,acresOfLand,bushelsPerAcre);
+
         for(int year = 1; year <= 10; year++){
 
             int acresToBuy = askHowManyAcresToBuy(bushelsPerAcre,bushels);
@@ -49,6 +51,11 @@ public class Hammurabi {
 
             if(uprising(population,peopleStarved)){
                 System.out.println("TOO MANY PEOPLE DIED, YOU ARE IMPEACHED, BYE!!");
+
+                break;
+            }
+            if(population==0){
+                System.out.println("EVERYONE DIED, YOU HAVE SUBJECTS TO RULE, BYE!!");
                 break;
             }
 
@@ -56,6 +63,7 @@ public class Hammurabi {
             population += immigrant;
 
             int bushelsHarvested = harvest(acresToPlant);
+            int harvestRate = bushelsHarvested/acresToPlant;
             bushels += bushelsHarvested;
 
             int bushelsEatenByRats = grainEatenByRats(bushels);
@@ -63,10 +71,10 @@ public class Hammurabi {
 
             int newPrice = newCostOfLand();
 
-            printSummary(year,peopleStarved,immigrant,population,bushelsHarvested,
-                        bushelsPerAcre,bushelsEatenByRats,bushels,acresOfLand,newPrice);
-
             bushelsPerAcre = newPrice;
+
+            printSummary(year,peopleStarved,immigrant,population,bushelsHarvested,
+                    harvestRate,bushelsEatenByRats,bushels,acresOfLand,newPrice);
         }
 
     }
@@ -78,7 +86,7 @@ public class Hammurabi {
             System.out.print("How many acres shall you buy? : ");
             try {
                 acresAcquired = scanner.nextInt();
-                if(acresAcquired*price < bushels){
+                if(acresAcquired*price <= bushels){
                     return acresAcquired;
                 }
                 System.out.print("You don't have enough bushels!!! ");
@@ -205,6 +213,11 @@ public class Hammurabi {
         System.out.format("Rats destroyed %d bushels, leaving %d bushels in storage.\n",bushelsDestroyedByRats,leftOverBushelsAfterRats);
         System.out.format("The city owns %d acres of land.\n",acresOfLand);
         System.out.format("Land is currently worth %d bushels per acre.\n",price);
+        System.out.format("------------------------------------------------------------\n");
+    }
+
+    void finalSummary(boolean isWon){
+
     }
     //other methods go here
 }
