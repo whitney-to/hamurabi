@@ -51,16 +51,20 @@ public class Hammurabi {
 
             if(uprising(population,peopleStarved)){
                 System.out.println("TOO MANY PEOPLE DIED, YOU ARE IMPEACHED, BYE!!");
-
+                finalSummary(false);
                 break;
             }
             if(population==0){
-                System.out.println("EVERYONE DIED, YOU HAVE SUBJECTS TO RULE, BYE!!");
+                System.out.println("EVERYONE DIED, YOU HAVE NO SUBJECTS TO RULE, BYE!!");
+                finalSummary(false);
                 break;
             }
 
-            int immigrant = immigrants(population,acresOfLand,bushels);
-            population += immigrant;
+            int immigrant = 0;
+            if(peopleStarved==0){
+                immigrant = immigrants(population,acresOfLand,bushels);
+                population += immigrant;
+            }
 
             int bushelsHarvested = harvest(acresToPlant);
             int harvestRate = bushelsHarvested/acresToPlant;
@@ -76,7 +80,7 @@ public class Hammurabi {
             printSummary(year,peopleStarved,immigrant,population,bushelsHarvested,
                     harvestRate,bushelsEatenByRats,bushels,acresOfLand,newPrice);
         }
-
+        finalSummary(true);
     }
 
     // ----------------------------------------------------------------------------
@@ -89,7 +93,7 @@ public class Hammurabi {
                 if(acresAcquired*price <= bushels){
                     return acresAcquired;
                 }
-                System.out.print("You don't have enough bushels!!! ");
+                System.out.println("You don't have enough bushels! you only have "+bushels+" left!");
             }
             catch (InputMismatchException e) {
                 System.out.print("\"" + scanner.next() + "\" isn't a number!");
@@ -106,7 +110,7 @@ public class Hammurabi {
                 if(acresSold <= acresToSell){
                     return acresSold;
                 }
-                System.out.print("You don't have enough acres!!! ");
+                System.out.println("You don't have enough acres of land to sell. You only have "+acresToSell+"!!!");
             }
             catch (InputMismatchException e) {
                 System.out.print("\"" + scanner.next() + "\" isn't a number!");
@@ -139,7 +143,7 @@ public class Hammurabi {
                 acresToPlant = scanner.nextInt();
                 if(acresToPlant <= acresOwned
                         && acresToPlant <= 2*bushels
-                        && acresToPlant<= 10*population){
+                        && acresToPlant <= 10*population){
                     return acresToPlant;
                 }
                 System.out.print("You don't have enough acres or people or grain!!!");
@@ -217,7 +221,11 @@ public class Hammurabi {
     }
 
     void finalSummary(boolean isWon){
-
+        if(isWon){
+            System.out.println("You have ruled for 10 years without being impeached! The game is impressed");
+        } else {
+            System.out.println("Well, Try harder next time!");
+        }
     }
     //other methods go here
 }
